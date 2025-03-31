@@ -1,0 +1,437 @@
+1) Exibir todos os registros e todos os campos da tabela de Departamentos 
+
+PROC SQL;
+CREATE TABLE ex1_resp1 AS
+SELECT * FROM Depto
+;RUN;
+
+2) Apresente todos os salários existentes na empresa, porém sem duplicidades  
+
+PROC SQL;
+CREATE TABLE ex1_resp2 AS
+SELECT VlSalario FROM EMPREGADO
+;RUN;
+
+3) Apresente os nomes e funções de cada funcionário da empresa, porém classificados alfabeticamente e em ordem inversa 
+
+PROC SQL;
+CREATE TABLE ex1_resp3 AS
+SELECT NmEmpregado,DsCargo
+FROM EMPREGADO
+ORDER BY NmEmpregado DESC
+;RUN;
+
+ 4) Selecione os Nomes dos Departamentos que existem em São Paulo  
+
+PROC SQL;
+CREATE TABLE ex1_resp4 AS
+SELECT NmDepto,DsLocal FROM DEPTO
+WHERE DsLocal = "São Paulo"
+;RUN;
+
+5) Mostre o nome e o salário dos empregados que ganham entre 500 e 1000 reais  
+
+PROC SQL;
+CREATE TABLE ex1_resp5 AS
+SELECT NmEmpregado, VlSalario FROM EMPREGADO
+WHERE VlSalario BETWEEN 500 AND 1000
+;RUN;
+
+6) Mostre o nome do empregado e o número do departamento dos empregados dos departamentos 10, 30, 40.  
+
+PROC SQL;
+CREATE TABLE ex1_resp6 AS
+SELECT NmEmpregado, NrDepto FROM EMPREGADO
+WHERE NrDepto in (10,30,40)
+;RUN;
+
+7) Mostre o nome e o cargo dos empregados, cujo nome começam com a letra "F"  
+
+PROC SQL;
+CREATE TABLE ex1_resp7 AS
+SELECT NmEmpregado, DsCargo FROM EMPREGADO
+WHERE NmEmpregado LIKE 'F%'
+;RUN;
+
+8) Mostre o nome e o cargo dos empregados que não têm comissão  
+
+PROC SQL;
+CREATE TABLE ex1_resp8 AS
+SELECT NmEmpregado, DsCargo, VlComissao FROM EMPREGADO
+WHERE VlComissao NOT BETWEEN 1 AND 5000
+;RUN;
+
+9) Selecione os Empregados cujos salários sejam menores que 1000 ou maiores que 3500.  
+
+PROC SQL;
+CREATE TABLE ex1_resp9 AS
+SELECT NmEmpregado, VlSalario
+FROM EMPREGADO
+WHERE VlSalario < 1000
+OR VlSalario > 3500
+;RUN;
+
+10) Apresente todos os funcionários com salários entre 200 e 700 e que sejam Vendedores.  
+
+PROC SQL;
+CREATE TABLE ex1_resp10 AS
+SELECT NmEmpregado, VlSalario, DsCargo
+FROM EMPREGADO
+WHERE VlSalario
+BETWEEN 200 AND 700
+AND DsCargo LIKE 'Vended%'
+;RUN;
+
+11)Apresente todos os funcionários com salários entre 200 e 700 ou que sejam Vendedores.  
+
+PROC SQL;
+CREATE TABLE ex1_resp10 AS
+SELECT NmEmpregado, VlSalario, DsCargo
+FROM EMPREGADO
+WHERE VlSalario
+BETWEEN 200 AND 700
+OR DsCargo LIKE 'Vended%'
+;RUN;
+
+12) Apresente todos os funcionários com salários entre 200 e 700 e que sejam Vendedores ou Secretárias.  
+
+PROC SQL;
+CREATE TABLE ex1_resp12 AS
+SELECT NmEmpregado, VlSalario, DsCargo
+FROM EMPREGADO
+WHERE DsCargo LIKE 'Secre%'
+OR DsCargo  LIKE 'Vend%'
+;RUN;
+
+13) Selecione todos os departamentos cujo orçamento anual seja maior que 100000.
+Apresente o Nome do departamento e seu orçamento anual, que deve ser obtido multiplicando-se o orçamento mensal por 12.  
+
+PROC SQL;
+CREATE TABLE ex1_resp13 AS
+SELECT NmDepto, (VlOrcamento*12) AS VlAnual
+FROM DEPTO
+WHERE VlOrcamento * 12 > 100000
+;RUN;
+
+14) Apresente a instrução anterior porém ao invés de mostrar os nomes "feios" das colunas NmDepto e VlOrcamento, mostre respectivamente "Departamento" e "Orçamento Anual".  
+
+PROC SQL;
+CREATE TABLE ex1_resp14 AS
+SELECT NmDepto AS DEPARTAMENTO ,
+VlOrcamento AS "Orçamento Anual"N
+FROM ex1_resp13
+;RUN;
+
+15) Apresente o nome de todos os empregados em letras minúsculas.  
+PROC SQL;
+CREATE TABLE ex1_resp15 AS
+SELECT LOWER (NmEmpregado)
+FROM EMPREGADO
+;RUN;
+
+ 16) Apresente o nome de todos os empregados (somente as 10 primeiras letras).  
+
+PROC SQL;
+CREATE TABLE ex1_resp16 AS
+SELECT (SUBSTR(NmEmpregado,1,10))
+FROM EMPREGADO
+;RUN;
+  
+17) Apresente o nome de todos os empregados admitidos em 13/01/1998.  
+
+PROC SQL;
+CREATE TABLE ex1_resp17 AS
+SELECT NmEmpregado, DtAdmissao
+FROM EMPREGADO
+WHERE DtAdmissao = "13JAN98"D
+;RUN;
+  
+18) Apresente a Média, o Maior, o Menor e a Somatória dos salários pagos aos empregados.  
+
+PROC SQL;
+CREATE TABLE ex1_resp18 AS
+SELECT AVG(VlSalario) AS SALARIO_MEDIO,
+MAX(VlSalario) AS SALARIO_MAIOR,
+MIN(VlSalario) AS SALARIO_MENOR,
+SUM(VlSalario) AS SALARIOS_TOTAL
+FROM EMPREGADO
+;RUN;
+  
+19) Apresente a média de salários pagos por departamento.  
+
+PROC SQL;
+CREATE TABLE ex1_resp19 AS
+SELECT NrDepto, AVG(VlSalario)
+AS Media_Salario
+FROM EMPREGADO
+GROUP BY NrDepto
+;RUN;
+  
+20) Refaça a questão anterior, porém apresentando resposta apenas para os departamentos com mais de 3 empregados.  
+
+PROC SQL;
+CREATE TABLE ex1_resp20 AS
+SELECT NrDepto, AVG(VlSalario) AS MediaSalar,
+COUNT(NrEmpregado) AS nEmpreg
+FROM EMPREGADO
+GROUP BY NrDepto
+HAVING COUNT(NrEmpregado) > 3
+;RUN;
+  
+21) Listar Nome e Cargo de Empregados e Nome do Departamento onde o empregado trabalha.  
+
+PROC SQL;
+CREATE TABLE ex1_resp21 AS
+SELECT NmEmpregado, DsCargo, DEPTO.NmDepto
+FROM EMPREGADO
+RIGHT JOIN DEPTO
+ON EMPREGADO.NrDepto = DEPTO.NrDepto
+;RUN;
+
+  
+22) Liste os Códigos de cada Funcionário, seus Nomes, seus Cargos e o Nome do Gerente ao qual este se relaciona.  
+
+PROC SQL;
+CREATE TABLE ex1_resp22 AS
+SELECT NmEmpregado, NrEmpregado, DsCargo,
+CASE	
+WHEN NrGerente = 110 THEN "Chico Buarque" 	
+WHEN NrGerente = 120 THEN "Caetano Velozo"	
+WHEN NrGerente = 130 THEN "Milton Nascimento"	
+ELSE "" END AS NmGerente
+FROM EMPREGADO
+;RUN;
+  
+23) Relacione todos os nomes de funcionários e seus respectivos cargos, desde que o orçamento do
+departamento seja igual a 30000.  
+
+PROC SQL;
+CREATE TABLE ex1_resp25 AS
+SELECT A.NmEmpregado, A.DsCargo, B.VlOrcamento
+FROM EMPREGADO AS A
+LEFT JOIN DEPTO AS B
+ON A.NrDepto = B.NRDepto
+WHERE VlOrcamento = 30000
+;RUN;
+
+  
+24) Relacione todos os departamentos que possuem empregados com remuneração maior que 2500. 
+
+PROC SQL;
+CREATE TABLE ex1_resp24 AS
+SELECT B.NmDepto, A.NmEmpregado, A.VlSalario
+FROM EMPREGADO AS A
+LEFT JOIN DEPTO AS B
+ON A.NrDepto = B.NrDepto
+WHERE VlSalario > 2500
+;RUN;
+
+  
+25) Liste todos os empregados que tenham códigos > 140 ou funcionários que trabalhem em departamentos
+com código maior que 120.  
+
+PROC SQL;
+CREATE TABLE ex1_resp25 AS
+SELECT A.NmEmpregado, A.NrEmpregado, B.NmDepto, B.NrDepto
+FROM EMPREGADO AS A
+LEFT JOIN DEPTO AS B
+ON A.NrDepto = B.NrDepto
+WHERE A.NrEmpregado > 140
+OR B.NrDepto > 120
+;RUN;
+
+
+			 EXERCÌCIOS 
+
+1) Mostre o nome e o local do departamento 50.  
+
+PROC SQL;
+CREATE TABLE ex2_resp2 AS
+SELECT DsLocal as LOCAL_DEPARTAMENTO, NmDepto AS DEPARTAMENTO, NmDepto AS N_DEPARTAMENTO
+FROM DEPTO
+WHERE NrDepto = 50
+;RUN;
+
+2) Selecione o cargo, salário e comissão dos empregados cuja comissão excedeu o salário.   
+
+PROC SQL;
+CREATE TABLE ex2_resp2 AS
+SELECT DsCargo as CARGO, VlSalario AS SALARIO, VlComissao AS COMISSAO
+FROM EMPREGADO
+WHERE VlComissao > VlSalario
+;RUN;
+
+3) Mostre os nomes de todos os departamentos que ficam em São Paulo.  
+
+PROC SQL;
+CREATE TABLE ex2_resp3 AS
+SELECT NmDepto AS DEPARTAMENTO,
+DsLocal AS Local
+FROM DEPTO
+WHERE DsLocal LIKE 'São Paulo%'
+OR DsLocal LIKE 'Santo André%'
+;RUN;
+
+4) Selecione todos os cargos diferentes.  
+
+PROC SQL;
+CREATE TABLE ex2_resp5 AS
+SELECT DISTINCT DsCargo
+FROM EMPREGADO
+;RUN;
+
+5) Mostre o nome, cargo e número do departamento dos empregados que trabalham nos deptos. 20, 30 e 40.  
+
+PROC SQL;
+CREATE TABLE ex2_resp5 AS
+SELECT NmEmpregado ,DsCargo, NrDepto
+FROM EMPREGADO
+WHERE NrDepto IN (20, 30, 40)
+;RUN;
+
+6) Calcule e mostre quanto a companhia gasta com gerentes e vendedores em cada ano.  
+
+PROC SQL;
+CREATE TABLE ex2_resp6 AS
+SELECT DsCargo, SUM(VlSalario)
+AS VlTotalCargo
+FROM EMPREGADO
+WHERE DsCargo LIKE 'Gerent%'
+OR DsCargo LIKE 'Vended%'
+GROUP BY DsCargo
+;RUN;
+
+7) Mostre o número, nome e cargo de todos os empregados, ordenado por número de empregado.  
+
+PROC SQL;
+CREATE TABLE ex2_resp7 AS
+SELECT NrEmpregado, NmEmpregado,
+DsCargo
+FROM EMPREGADO
+ORDER BY NrEmpregado ASC
+;RUN;
+
+8) Para cada departamento, mostre o seu número, total de empregados e total dos salários completos.  
+
+PROC SQL;
+CREATE TABLE ex3_resp9 AS
+SELECT COUNT (NrEmpregado) AS EmpregTotal,
+NrDepto,
+SUM(VlSalario) AS SalaryTotal
+FROM EMPREGADO
+;RUN;
+
+9) Mostre o número do departamento, cargo, número de empregados e salário médio para cada cargo, por departamento, para os departamentos 10, 20 e 30.  
+
+PROC SQL;
+CREATE TABLE ex2_resp9 AS
+SELECT NrDepto, DsCargo, NmEmpregado,
+SUM(VlSalario) AS MedSalario
+FROM EMPREGADO
+WHERE NrDepto BETWEEN 10 AND 30
+GROUP BY DsCargo
+;RUN;
+
+10) Para cada departamento, mostre quanto se paga por ano a vendedores. Mostre também o número do departamento e o total de vendedores.   
+
+PROC SQL;
+CREATE TABLE ex2_resp10 AS
+SELECT NrDepto,
+DsCargo, SUM(VlSalario) AS TotalSl,
+(VlSalario*12) AS SalarMensal
+FROM EMPREGADO
+WHERE DsCargo LIKE 'Vended%'
+GROUP BY DsCargo
+;RUN;
+
+11) Calcule o número médio de empregados por departamento.  
+
+PROC SQL;
+CREATE TABLE ex2_resp11 AS
+SELECT DISTINCT NrDepto, DsCargo,
+COUNT (NrEmpregado) AS NrMedEmpregado
+FROM EMPREGADO
+group by NrDepto
+;RUN;
+
+12) Mostre qual o salário médio de todos os cargos, exceto o de presidente.  
+
+PROC SQL;
+CREATE TABLE ex2_resp12 AS
+SELECT DISTINCT DsCargo,
+AVG(VlSalario) AS SalMedio
+FROM EMPREGADO
+WHERE DsCargo NOT LIKE  'Preside%'
+GROUP BY DsCargo
+;RUN;
+
+13) Mostre o nome e o cargo do empregado que ganha o maior salário total.  
+
+PROC SQL;
+CREATE TABLE ex2_resp13 AS
+SELECT NmEmpregado, DsCargo, VlSalario AS SlMax
+FROM EMPREGADO
+WHERE VlSalario IN (SELECT MAX(VlSalario)
+FROM EMPREGADO)
+;RUN;
+
+14) Liste o nome, cargo e salário dos empregados não pertencentes ao departamento 10, que têm o mesmo salário e cargo dos empregados do departamento 10.  
+
+PROC SQL;
+CREATE TABLE ex2_resp14 AS
+SELECT NmEmpregado, DsCargo, NrDepto,
+VlSalario
+FROM EMPREGADO
+WHERE NrDepto <> 10
+AND VlSalario IN (SELECT VlSalario
+FROM EMPREGADO WHERE NrDepto = 10)
+AND DsCargo IN (SELECT DsCargo
+FROM EMPREGADO WHERE NrDepto = 10)
+;RUN;
+
+
+  15) Mostre o número do departamento, nome, cargo, salário total e comissão, dos vendedores que ganham o maior salário total, e dos vendedores do departamento 20. Ordene o resultado por salário e por ordem decrescente.  
+
+PROC SQL;
+CREATE TABLE ex2_resp16 AS
+SELECT NrDepto, NmEmpregado,
+DsCargo, VlSalario, VlComissao
+FROM EMPREGADO
+WHERE DsCargo LIKE 'Vended%'
+;RUN;
+
+17) Mostre o número do departamento e salário médio dos departamentos que têm um salário médio superior a 5000.  
+
+PROC SQL;
+CREATE TABLE ex2_resp17 AS
+SELECT NrDepto, AVG(VlSalario)
+AS Media
+FROM EMPREGADO
+WHERE VlSalario IN (SELECT
+AVG(VlSalario) FROM EMPREGADO
+WHERE VlSalario > 5000)
+GROUP BY NrDepto
+
+;RUN;
+
+18) Selecione o número do departamento e número de vendedores, para cada departamento que tenha mais do que 2 vendedores.  
+
+PROC SQL;
+CREATE TABLE ex2_resp18 AS
+SELECT COUNT(DsCargo) as NrVended, NrDepto
+FROM EMPREGADO
+WHERE DsCargo Like 'Vended%'
+GROUP BY NrDepto
+;RUN;
+
+19) Liste o número do departamento e salário médio para os departamento com maior salário médio.  
+
+PROC SQL;
+CREATE TABLE ex2_resp17 AS
+SELECT NrDepto, AVG(VlSalario)
+AS Media
+FROM EMPREGADO
+WHERE VlSalario IN (SELECT
+MAX(VlSalario) FROM EMPREGADO)
+GROUP BY NrDepto
+;RUN;
